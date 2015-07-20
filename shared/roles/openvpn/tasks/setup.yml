@@ -1,0 +1,26 @@
+---
+
+# TODO -- routing configuration in ferm & kernel (sysctl.conf)
+
+# TODO -- notify server reload
+- name: copy config file over
+  template:
+    src: server.conf
+    dest: /etc/openvpn/server.conf
+
+- name: ensure vpn has started
+  service:
+    name: openvpn
+    state: started
+    enabled: yes
+
+
+
+
+
+
+
+
+
+
+

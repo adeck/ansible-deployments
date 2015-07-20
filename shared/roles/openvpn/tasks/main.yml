@@ -1,0 +1,7 @@
+---
+
+- include: install.yml
+- include: key-setup.yml
+- include: setup.yml
+
+

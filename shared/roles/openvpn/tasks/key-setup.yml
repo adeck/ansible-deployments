@@ -1,0 +1,70 @@
+---
+
+- name: copy easy-rsa dir
+  command: cp -r /usr/share/easy-rsa/2.0 /etc/easy-rsa-openvpn
+  args:
+    creates: /etc/easy-rsa-openvpn
+
+- name: create keys directory
+  file:
+    name: /etc/easy-rsa-openvpn/keys
+    state: directory
+    mode: 0500
+
+- name: copy vars file over
+  copy:
+    src: vars
+    dest: /etc/easy-rsa-openvpn/vars
+
+- name: ensure openssl-1.0.0.cnf is used
+  command: ln /etc/easy-rsa-openvpn/openssl-1.0.0.cnf /etc/easy-rsa-openvpn/openssl.cnf
+  args:
+    creates: "/etc/easy-rsa-openvpn/openssl.cnf"
+
+- name: create CA cert
+  script: mk-ca.sh
+  args:
+    creates: /etc/easy-rsa-openvpn/keys/ca.crt
+
+- name: ensure the mk-ca script worked
+  file:
+    name: "/etc/easy-rsa-openvpn/keys/{{ item }}"
+    state: file
+  with_items:
+    - ca.crt
+    - ca.key
+    - index.txt
+    - serial
+
+- name: build key server
+  script: build-key-server.sh
+  args:
+    creates: /etc/easy-rsa-openvpn/keys/01.pem
+
+- name: ensure the key server build script worked
+  file:
+    name: "/etc/easy-rsa-openvpn/keys/{{ item }}"
+    state: file
+  with_items:
+    - server.crt
+    - server.key
+    - server.csr
+    - 01.pem
+
+- name: build Diffie-Hellman key
+  script: mk-dh.sh
+  args:
+    creates: /etc/easy-rsa-openvpn/keys/dh2048.pem
+
+- name: copy the keys over to the openvpn config dir
+  command: cp "/etc/easy-rsa-openvpn/keys/{{ item }}" "/etc/openvpn/{{ item }}"
+  args:
+    creates: "/etc/openvpn/{{ item }}"
+  with_items:
+    - dh2048.pem
+    - ca.crt
+    - server.crt
+    - server.key
+
+
+
