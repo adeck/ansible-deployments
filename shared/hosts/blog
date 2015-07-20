@@ -1,6 +1,6 @@
 
 [blog]
-blog_dev
+dev
 blog_prod
 
 [impolite.ninja:children]

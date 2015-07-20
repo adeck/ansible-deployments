@@ -1,0 +1,7 @@
+---
+
+- name: ensure file commands will work on the selinux-enabled machine
+  yum:
+    name: libselinux-python
+    state: present
+
