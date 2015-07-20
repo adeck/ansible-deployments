@@ -5,4 +5,10 @@ blog_prod
 
 [impolite.ninja:children]
 blog
+fail2ban
+
+[all:children]
+ferm
+ssh
+fwknopd
 

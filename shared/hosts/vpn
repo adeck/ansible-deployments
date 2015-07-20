@@ -6,3 +6,9 @@ vpn_prod
 [menacing.agency:children]
 vpn
 
+[all:children]
+ferm
+ssh
+fwknopd
+
+

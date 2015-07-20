@@ -1,0 +1,20 @@
+---
+- name: install iptables
+  yum:
+    name: iptables
+    state: present
+
+- name: ensure iptables is running at boot and at all times
+  service:
+    name: iptables
+    state: started
+    enabled: yes
+
+- name: install ferm
+  yum:
+    name: ferm
+    state: present
+
+
+
+

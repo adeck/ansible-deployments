@@ -1,0 +1,21 @@
+---
+
+- name: ensure ferm dir exists
+  file:
+    path: /etc/ferm
+    state: directory
+    mode: 0750
+
+- name: copy ferm config
+  template:
+    src: ferm.conf
+    dest: /etc/ferm/ferm.conf
+    mode: 0750
+
+- name: run ferm
+  command: ferm /etc/ferm/ferm.conf
+  changed_when: false
+
+
+
+

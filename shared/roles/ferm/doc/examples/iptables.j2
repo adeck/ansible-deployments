@@ -1,0 +1,229 @@
+# Firewall configuration written by system-config-firewall
+# Manual customization of this file is not recommended.
+*filter
+:INPUT DROP [0:0]
+:Loopback-INPUT - [0:0]
+:Cont-INPUT - [0:0]
+:Private-INPUT - [0:0]
+:Throttle-INPUT - [0:0]
+:Throttle-ICMP-INPUT - [0:0]
+:Global-Throttle-INPUT - [0:0]
+:SSH-Throttle-INPUT - [0:0]
+:ICMP-INPUT - [0:0]
+:Accept-Service-INPUT - [0:0]
+:Accept-Jinx-INPUT - [0:0]
+:SSH-KNOCKING - [0:0]
+:SSH-GATE1 - [0:0]
+:SSH-GATE2 - [0:0]
+:SSH-GATE3 - [0:0]
+:SSH-GATE4 - [0:0]
+:SSH-GATE5 - [0:0]
+:SSH-GATE6 - [0:0]
+:SSH-PASSED - [0:0]
+
+:FORWARD DROP [0:0]
+
+:OUTPUT ACCEPT [0:0]
+:Private-OUTPUT - [0:0]
+:Spoof-OUTPUT - [0:0]
+:Proxy-OUTPUT - [0:0]
+:User-Crunch-OUTPUT - [0:0]
+:User-494-Crunch-OUTPUT - [0:0]
+:User-497-Crunch-OUTPUT - [0:0]
+:User-496-Crunch-OUTPUT - [0:0]
+# TODO -- implement this
+:SSH-Knocking-OUTPUT - [0:0]
+:SSH-Gate1-OUTPUT - [0:0]
+:SSH-Gate2-OUTPUT - [0:0]
+:SSH-Gate3-OUTPUT - [0:0]
+:SSH-Gate4-OUTPUT - [0:0]
+:SSH-Gate5-OUTPUT - [0:0]
+:SSH-Gate6-OUTPUT - [0:0]
+:SSH-Passed-OUTPUT - [0:0]
+
+###### INPUT chain ######
+-A INPUT -j Cont-INPUT
+# The original knocking script; replace with something better when there's time.
+-A INPUT -j SSH-KNOCKING
+# TODO -- ensure that log on throttle can't DoS with the magick of fail2ban
+-A INPUT -j Throttle-INPUT
+-A INPUT -p icmp -j ICMP-INPUT
+-A INPUT -i lo -j Loopback-INPUT
+-A INPUT -j Private-INPUT
+-A INPUT -j Accept-Service-INPUT
+# Log and drop everything else
+-A INPUT -j LOG
+-A INPUT -j DROP
+
+###### Throttle-INPUT ######
+-A Throttle-INPUT -p icmp -j Throttle-ICMP-INPUT
+-A Throttle-INPUT -j Global-Throttle-INPUT
+
+###### Loopback-INPUT chain ######
+-A Loopback-INPUT -j ACCEPT
+
+###### Private-INPUT chain ######
+-A Private-INPUT -i eth1 -s 10.0.0.0/8 -j LOG --log-prefix "IP DROP SPOOF A: "
+-A Private-INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+-A Private-INPUT -i eth1 -s 172.16.0.0/12 -j LOG --log-prefix "IP DROP SPOOF B: "
+-A Private-INPUT -i eth1 -s 172.16.0.0/12 -j DROP
+# TODO -- handle gateway
+# TODO -- uncomment these lines
+#-A Private-INPUT -i eth1 -s 192.168.0.0/16 -j LOG --log-prefix "IP DROP SPOOF C: "
+#-A Private-INPUT -i eth1 -s 192.168.0.0/16 -j DROP
+-A Private-INPUT -i eth1 -s 224.0.0.0/4 -j LOG --log-prefix "IP DROP MULTICAST D: "
+-A Private-INPUT -i eth1 -s 224.0.0.0/4 -j DROP
+-A Private-INPUT -i eth1 -s 240.0.0.0/5 -j LOG --log-prefix "IP DROP SPOOF E: "
+-A Private-INPUT -i eth1 -s 240.0.0.0/5 -j DROP
+-A Private-INPUT -i eth1 -s 127.0.0.0/8 -j LOG --log-prefix "IP DROP LOOPBACK: "
+-A Private-INPUT -i eth1 -s 127.0.0.0/8 -j DROP
+
+###### ICMP-INPUT ######
+# Accept pings and a couple other ICMP packets
+-A ICMP-INPUT -p icmp --icmp-type echo-request -j ACCEPT
+-A ICMP-INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+-A ICMP-INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
+-A ICMP-INPUT -p icmp --icmp-type time-exceeded -j ACCEPT
+
+###### Cont-INPUT ######
+# Accept established connections
+-A Cont-INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+###### Throttle-ICMP-INPUT ######
+-A Throttle-ICMP-INPUT -p icmp -m limit --limit 6/s --limit-burst 1 -j RETURN
+-A Throttle-ICMP-INPUT -j DROP
+
+###### Global-Throttle-INPUT ######
+# Rate limiting with recent
+-A Global-Throttle-INPUT -p tcp -i eth1 -m state --state NEW -m recent --set --name GLOBALTHROTTLE --rsource
+-A Global-Throttle-INPUT -p tcp -i eth1 -m state --state NEW -m recent --update --seconds 1 --hitcount 9 --name GLOBALTHROTTLE -j LOG --log-prefix "GLOBAL connection overload: "
+-A Global-Throttle-INPUT -p tcp -i eth1 -m state --state NEW -m recent --update --seconds 1 --hitcount 9 --name GLOBALTHROTTLE -j DROP
+
+###### SSH-Throttle-INPUT ######
+# -p tcp -i eth1 -m state --state NEW --dport 22
+-A SSH-Throttle-INPUT -m recent --set --name SSHTHROTTLE --rsource
+-A SSH-Throttle-INPUT -m recent --update --seconds 60 --hitcount 5 --name SSHTHROTTLE -j LOG --log-prefix "SSH connection overload: "
+-A SSH-Throttle-INPUT -m recent --update --seconds 60 --hitcount 5 --name SSHTHROTTLE -j DROP
+
+# Rate limiting with limit, unused
+#-A Global-Throttle-INPUT -p tcp -i eth1 -m state --state NEW -m limit --limit 300/min -j LOG --log-prefix "Rate limited: "
+
+###### Accept-Service-INPUT ######
+-A Accept-Service-INPUT -j Accept-Jinx-INPUT
+
+###### Accept-Jinx-INPUT ######
+-A Accept-Jinx-INPUT -m state --state NEW -m multiport -p tcp --dports 80,443 -j ACCEPT
+
+###### SSH-GATE (s) ######
+-A SSH-GATE1 -p tcp --dport 1868 -m recent --name SSHAUTH1 --set -j DROP
+
+-A SSH-GATE2 -m recent --name SSHAUTH1 --remove
+-A SSH-GATE2 -p tcp --dport 4871 -m recent --name SSHAUTH2 --set -j DROP
+-A SSH-GATE2 -j SSH-GATE1
+
+-A SSH-GATE3 -m recent --name SSHAUTH2 --remove
+-A SSH-GATE3 -p tcp --dport 51641 -m recent --name SSHAUTH3 --set -j DROP
+-A SSH-GATE3 -j SSH-GATE1
+
+-A SSH-GATE4 -m recent --name SSHAUTH3 --remove
+-A SSH-GATE4 -p tcp --dport 5563 -m recent --name SSHAUTH4 --set -j DROP
+-A SSH-GATE4 -j SSH-GATE1
+
+-A SSH-GATE5 -m recent --name SSHAUTH4 --remove
+-A SSH-GATE5 -p tcp --dport 43890 -m recent --name SSHAUTH5 --set -j DROP
+-A SSH-GATE5 -j SSH-GATE1
+
+-A SSH-GATE6 -m recent --name SSHAUTH5 --remove
+-A SSH-GATE6 -p tcp --dport 10155 -m recent --name SSHAUTH6 --set -j DROP
+-A SSH-GATE6 -j SSH-GATE1
+
+###### SSH-PASSED ######
+-A SSH-PASSED -m recent --name SSHAUTH6 --remove
+# Throttle SSH here; otherwise too much noise.
+-A SSH-PASSED -p tcp -i eth1 -m state --state NEW --dport 22 -j SSH-Throttle-INPUT
+-A SSH-PASSED -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A SSH-PASSED -j SSH-GATE1
+
+###### SSH-KNOCKING ######
+# The times are set as long as they are because they don't really need to be
+#    short; timing doesn't actually matter here. What matters is the
+#    likelihood that a bot will guess these 6 ports in order, as well as the
+#    (remapped) ssh port.
+# But, mainly, they are set so far apart because a human should be able to
+#    do a manual ping sequence if they so desire.
+-A SSH-KNOCKING -p tcp -m multiport --dports 80,443 -j RETURN
+-A SSH-KNOCKING -m recent --rcheck --name SSHAUTH6 --seconds 30 -j SSH-PASSED
+-A SSH-KNOCKING -m recent --rcheck --name SSHAUTH5 --seconds 10 -j SSH-GATE6
+-A SSH-KNOCKING -m recent --rcheck --name SSHAUTH4 --seconds 10 -j SSH-GATE5
+-A SSH-KNOCKING -m recent --rcheck --name SSHAUTH3 --seconds 10 -j SSH-GATE4
+-A SSH-KNOCKING -m recent --rcheck --name SSHAUTH2 --seconds 10 -j SSH-GATE3
+-A SSH-KNOCKING -m recent --rcheck --name SSHAUTH1 --seconds 10 -j SSH-GATE2
+-A SSH-KNOCKING -j SSH-GATE1
+
+###### FORWARD ######
+-A FORWARD -j DROP
+
+###### OUTPUT ######
+-A OUTPUT -j Private-OUTPUT
+-A OUTPUT -j Spoof-OUTPUT
+-A OUTPUT -j User-Crunch-OUTPUT
+-A OUTPUT -j Proxy-OUTPUT
+-A OUTPUT -j ACCEPT
+
+###### Private-OUTPUT ######
+-A Private-OUTPUT -o eth1 -d 10.0.0.0/8 -j LOG --log-prefix "IP DROP SPOOF A: "
+-A Private-OUTPUT -o eth1 -d 10.0.0.0/8 -j DROP
+-A Private-OUTPUT -o eth1 -d 172.16.0.0/12 -j LOG --log-prefix "IP DROP SPOOF B: "
+-A Private-OUTPUT -o eth1 -d 172.16.0.0/12 -j DROP
+# TODO -- handle gateway
+# TODO -- uncomment these lines
+#-A Private-OUTPUT -o eth1 -d 192.168.0.0/16 -j LOG --log-prefix "IP DROP SPOOF C: "
+#-A Private-OUTPUT -o eth1 -d 192.168.0.0/16 -j DROP
+-A Private-OUTPUT -o eth1 -d 224.0.0.0/4 -j LOG --log-prefix "IP DROP MULTICAST D: "
+-A Private-OUTPUT -o eth1 -d 224.0.0.0/4 -j DROP
+-A Private-OUTPUT -o eth1 -d 240.0.0.0/5 -j LOG --log-prefix "IP DROP SPOOF E: "
+-A Private-OUTPUT -o eth1 -d 240.0.0.0/5 -j DROP
+-A Private-OUTPUT -o eth1 -d 127.0.0.0/8 -j LOG --log-prefix "IP DROP LOOPBACK: "
+-A Private-OUTPUT -o eth1 -d 127.0.0.0/8 -j DROP
+
+###### Spoof-OUTPUT ######
+-A Spoof-OUTPUT -o eth1 -s 192.168.1.237 -j RETURN
+-A Spoof-OUTPUT -o eth1 -j LOG --log-prefix "IP SPOOF OUTPUT: "
+-A Spoof-OUTPUT -o eth1 -j DROP
+
+###### User-Crunch-OUTPUT ######
+-A User-Crunch-OUTPUT -m owner --uid-owner 497 -j User-497-Crunch-OUTPUT
+-A User-Crunch-OUTPUT -m owner --uid-owner 496 -j User-496-Crunch-OUTPUT
+-A User-Crunch-OUTPUT -m owner --uid-owner 494 -j User-494-Crunch-OUTPUT
+
+# Moj
+###### User-497-Crunch-OUTPUT ######
+-A User-497-Crunch-OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A User-497-Crunch-OUTPUT -j LOG --log-prefix "Inmate 497 attempted egress: "
+-A User-497-Crunch-OUTPUT -j DROP
+
+# Ngi
+###### User-494-Crunch-OUTPUT ######
+-A User-494-Crunch-OUTPUT -d 127.0.0.1 -p tcp --dport 80 -j ACCEPT
+-A User-494-Crunch-OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A User-494-Crunch-OUTPUT -j LOG --log-prefix "Inmate 494 attempted egress: "
+-A User-494-Crunch-OUTPUT -j DROP
+
+###### Proxy-OUTPUT ######
+# Turns out the 127/8 addresses aren't all available. What epic bullshit.
+# This will have to dooooooo
+-A Proxy-OUTPUT -d 127.0.0.1 --dport 80 -j DROP 
+
+# Bla
+###### User-496-Crunch-OUTPUT ######
+-A User-496-Crunch-OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A User-496-Crunch-OUTPUT -j SSH-Knocking-OUTPUT
+-A User-496-Crunch-OUTPUT -j LOG --log-prefix "Inmate 496 attempted egress: "
+-A User-496-Crunch-OUTPUT -j DROP
+
+###### SSH-Knocking-OUTPUT ######
+# TODO -- Add knocking
+-A SSH-Knocking-OUTPUT -m state --state NEW -p tcp --dport 22 -d bitbucket.org -j ACCEPT
+
+COMMIT
+
