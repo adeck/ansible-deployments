@@ -1,0 +1,29 @@
+---
+- name: install rpmforge key
+  rpm_key:
+    key: http://apt.sw.be/RPM-GPG-KEY.dag.txt
+
+- name: install rpmforge repo
+  yum:
+    name: http://rpmforge.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+
+- name: install ddclient
+  yum:
+    name: ddclient
+    state: present
+
+- name: copy ddclient config file
+  template:
+    src: ddclient.conf
+    dest: /etc/ddclient/ddclient.conf
+  notify: reload ddclient
+
+- name: setup ddclient service
+  service:
+    name: ddclient
+    state: started
+    enabled: yes
+  
+
+
+
