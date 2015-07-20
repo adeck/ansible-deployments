@@ -1,0 +1,8 @@
+
+[blog]
+blog_dev
+blog_prod
+
+[impolite.ninja:children]
+blog
+

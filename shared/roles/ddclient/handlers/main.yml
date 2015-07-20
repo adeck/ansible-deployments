@@ -1,4 +1,5 @@
 ---
+
 # The ddclient service doesn't accept 'reload' as an argument, so restart
 #   is the closest you can get.
 - name: reload ddclient
