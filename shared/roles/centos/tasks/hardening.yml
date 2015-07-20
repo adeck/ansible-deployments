@@ -1,0 +1,8 @@
+---
+
+- name: ensure all packages are latest version
+  yum:
+    name: *
+    state: latest
+
+
