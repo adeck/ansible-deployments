@@ -4,9 +4,7 @@
   yum:
     name: "{{ item }}"
     state: present
-  with_items:
-    - easy-rsa
-    - openvpn
+  with_items: "{{ openvpn }}"
   register: openvpn_installation
 
 - name: ensure openvpn service is disabled if recently updated / installed

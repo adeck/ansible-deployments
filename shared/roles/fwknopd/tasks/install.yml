@@ -3,10 +3,7 @@
 - name: install fwknop-server
   yum:
     name: "{{ item }}"
-  with_items:
-    - glibc
-    - https://www.cipherdyne.org/fwknop/download/libfko-2.0.3-1.x86_64.rpm
-    - https://www.cipherdyne.org/fwknop/download/fwknop-server-2.6.6-1.fc21.x86_64.rpm
+  with_items: "{{ fwknopd }}"
   
 
 

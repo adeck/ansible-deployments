@@ -1,0 +1,7 @@
+---
+
+
+openvpn:
+  - easy-rsa
+  - openvpn
+

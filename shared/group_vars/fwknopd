@@ -1,0 +1,8 @@
+---
+
+cipherdyne: "https://www.cipherdyne.org/fwknop/download" 
+fwknopd:
+  - glibc
+  - "{{ cipherdyne }}/libfko-2.0.3-1.x86_64.rpm"
+  - "{{ cipherdyne }}/fwknop-server-2.6.6-1.fc21.x86_64.rpm"
+
