@@ -1,0 +1,17 @@
+---
+
+- name: copy global nginx config file
+  template:
+    src: nginx_conf.j2
+    dest: /etc/nginx/nginx.conf
+
+- name: start nginx + ensure start at boot
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+
+
+
+
