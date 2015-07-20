@@ -14,6 +14,7 @@ create() {
   mkdir plays roles hosts
   _link host_vars
   _link group_vars
+  _link ansible.cfg
 }
 
 # Used to link a given ansible inventory file to the current project

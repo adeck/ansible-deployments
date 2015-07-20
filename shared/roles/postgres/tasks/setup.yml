@@ -1,0 +1,18 @@
+---
+
+# Note that the path to this file depends highly upon postgres version.
+#   Also depends upon installer and operating system.
+- name: copy over pg_hba.conf
+  template:
+    src: pg_hba.conf
+    dest: /var/lib/pgsql/data/pg_hba.conf
+  notify: reload postgres
+
+- name: ensure postgres is started and starts at boot
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+
+

@@ -1,0 +1,6 @@
+---
+
+- include: ansible.yml
+- include: install.yml
+- include: setup.yml
+

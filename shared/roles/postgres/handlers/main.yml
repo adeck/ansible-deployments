@@ -1,0 +1,8 @@
+---
+
+# This doesn't reload pg_hba. That requires a separate reload.
+- name: reload postgres
+  service:
+    name: postgresql
+    state: reloaded
+

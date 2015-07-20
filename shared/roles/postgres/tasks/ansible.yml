@@ -1,0 +1,7 @@
+---
+
+- name: install necessary packages for ansible postgres integration
+  yum:
+    name: python-psycopg2
+    state: present
+

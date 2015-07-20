@@ -1,0 +1,19 @@
+---
+
+- name: install postgres server
+  yum:
+    name: postgresql-server
+    state: present
+  register: dbdeps
+
+- name: postgres initdb
+  command: service postgresql initdb
+  when: dbdeps.changed
+
+- name: ensure postgres isn't running if it's just been installed
+  service:
+    name: postgresql
+    state: stopped
+    enabled: no
+  when: dbdeps.changed
+
