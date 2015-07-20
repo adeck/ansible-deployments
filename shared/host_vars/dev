@@ -1,0 +1,8 @@
+#
+# host_vars for "dev"
+#
+
+prod: no
+ansible_ssh_host: 10.0.2.222
+
+
