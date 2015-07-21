@@ -22,6 +22,7 @@ create() {
     touch inventory/template.ini
     _link ansible.cfg
     echo > .gitignore "/site.yml"
+    echo > .gitignore "/inventory/host_vars"
     # ...including roles common to all projects.
     for role in ${COMMON_ROLES[@]} ; do
       lnrole "$role"
