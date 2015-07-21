@@ -9,28 +9,25 @@ DEPLOY_HOME='../../shared'
 # creates the symbolic links and directories all projects need
 create() {
   # create the role's directory if name specified; otherwise assume we're in it
-  [ $# -eq 1 ] && {
-    mkdir "$1"
-    cd "$1"
-  }
+  if [ $# -ne 1 ]
+  then
+    echo >&2 "You must provide the name of the new project to create."
+    exit 1
+  fi
+  mkdir "$1"
+  cd "$1"
   # create and link resources all projects need
-  mkdir plays roles hosts
-  _link host_vars
-  _link group_vars
+  mkdir -p plays roles inventory/group_vars
+  touch inventory/template.ini
   _link ansible.cfg
+  echo > .gitignore "/site.yml"
   # ...including roles common to all projects.
   for role in ${COMMON_ROLES[@]} ; do
     lnrole "$role"
   done
 }
 
-# Used to link a given ansible inventory file to the current project
-lnhost() {
-  local dir="$DEPLOY_HOME"
-  local file="hosts/$1"
-  ln -s "../$dir/$file" "$file"
-}
-
+# Used to link a given role to the current project
 lnrole() {
   local dir="$DEPLOY_HOME"
   local file="roles/$1"
