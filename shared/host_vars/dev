@@ -3,9 +3,10 @@
 #
 
 prod: no
-ansible_ssh_host: 10.0.2.222
+ansible_ssh_host: 192.168.56.99
+ansible_ssh_user: root
 tmp:
-  - 10.0.2.0/24
+  - "{{ ansible_ssh_host }}/24"
 used_networks:
   "{{ tmp + (used_networks if used_networks is defined else empty) }}"
 

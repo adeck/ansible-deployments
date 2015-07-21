@@ -12,8 +12,9 @@
 
 - name: install ferm
   yum:
-    name: ferm
+    name: "{{ item }}"
     state: present
+  with_items: "{{ ferm }}"
 
 
 

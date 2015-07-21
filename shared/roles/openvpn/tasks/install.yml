@@ -4,7 +4,7 @@
   yum:
     name: "{{ item }}"
     state: present
-  with_items: "{{ openvpn }}"
+  with_items: "{{ openvpn_packages }}"
   register: openvpn_installation
 
 - name: ensure openvpn service is disabled if recently updated / installed

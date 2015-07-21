@@ -11,13 +11,15 @@
     state: directory
     mode: 0500
 
-- name: copy vars file over
+- name: copy easy-rsa vars file over
   copy:
     src: vars
     dest: /etc/easy-rsa-openvpn/vars
 
 - name: ensure openssl-1.0.0.cnf is used
-  command: ln /etc/easy-rsa-openvpn/openssl-1.0.0.cnf /etc/easy-rsa-openvpn/openssl.cnf
+  command: >
+    ln /etc/easy-rsa-openvpn/openssl-1.0.0.cnf
+      /etc/easy-rsa-openvpn/openssl.cnf
   args:
     creates: "/etc/easy-rsa-openvpn/openssl.cnf"
 
@@ -57,7 +59,9 @@
     creates: /etc/easy-rsa-openvpn/keys/dh2048.pem
 
 - name: copy the keys over to the openvpn config dir
-  command: cp "/etc/easy-rsa-openvpn/keys/{{ item }}" "/etc/openvpn/{{ item }}"
+  command: >
+    cp  "/etc/easy-rsa-openvpn/keys/{{ item }}" 
+        "/etc/openvpn/{{ item }}"
   args:
     creates: "/etc/openvpn/{{ item }}"
   with_items:

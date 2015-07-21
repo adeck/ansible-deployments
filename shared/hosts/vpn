@@ -1,14 +1,28 @@
 
-[vpn]
+##############################
+#### Customization code   ####
+##############################
+
+[openvpn:children]
+menacing.agency
+
+[menacing.agency]
 dev
 vpn_prod
 
-[menacing.agency:children]
-vpn
+############################################
+#### Code common to all inventory files ####
+############################################
 
-[all:children]
-ferm
-ssh
-fwknopd
+[ferm:children]
+main
+[ssh:children]
+main
+[fwknopd:children]
+main
 
+[main]
+dev
+vpn_prod
+blog_prod
 
