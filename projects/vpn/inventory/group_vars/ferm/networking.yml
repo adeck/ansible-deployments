@@ -4,7 +4,7 @@
 # Network sections from impossible_networks which should be allowed
 #   / are actually being used by the current host 
 # By default, there are none.
-used_networks: 
+#used_networks: 
 
 # The list of publicly visible TCP ports / serives; anything that would
 #   work for iptables works here
