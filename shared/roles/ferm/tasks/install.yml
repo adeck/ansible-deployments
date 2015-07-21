@@ -14,7 +14,7 @@
   yum:
     name: "{{ item }}"
     state: present
-  with_items: "{{ ferm }}"
+  with_items: "{{ ferm_packages }}"
 
 
 

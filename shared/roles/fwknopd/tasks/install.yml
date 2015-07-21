@@ -3,7 +3,7 @@
 - name: install fwknop-server
   yum:
     name: "{{ item }}"
-  with_items: "{{ fwknopd }}"
+  with_items: "{{ fwknopd_packages }}"
   
 
 

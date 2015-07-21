@@ -1,0 +1,22 @@
+---
+
+- name: List the default vars files
+  local_action: >
+    command ls roles/fwknopd/vars/defaults
+  register: default_vars_files
+
+- name: Include default vars files
+  include_vars: "defaults/{{ item }}"
+  with_items: "{{ default_vars_files.stdout_lines }}"
+  when: default_vars_files
+
+- name: List the extern vars files
+  local_action: >
+    shell ls roles/fwknopd/vars/extern || true
+  register: extern_vars_files
+
+- name: Include extern vars files
+  include_vars: "extern/{{ item }}"
+  with_items: "{{ extern_vars_files.stdout_lines }}"
+  when: extern_vars_files
+

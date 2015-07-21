@@ -1,5 +1,6 @@
 ---
 
+- include: vars.yml
 - include: install.yml
 - include: setup.yml
 
