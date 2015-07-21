@@ -1,9 +1,0 @@
----
-
-ferm:
-  - epel-release
-  - ferm
-
-public_services:
-used_networks:
-

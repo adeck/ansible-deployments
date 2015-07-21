@@ -1,0 +1,7 @@
+---
+
+ferm_packages:
+  - epel-release
+  - ferm
+
+
