@@ -4,9 +4,9 @@ This is a repo for, as the name suggests, automated deployments using Ansible.
 
 It is written in such a way as to be scalable and pluggable; starting a new project, mixing-and-matching roles, and getting up-to-speed on the existing codebase should be as easy as possible, and maintaining the result should also be as easy as possible. In order to maintain these constraints, a number of mandatory [guidelines][] are enforced for all code present here.
 
-All of these roles target CentOS 6.5, and will continue to target 6.5 until Centos 7 drops the nightmarish, fundamentally flawed bloatware that is systemd.
+All of these roles target CentOS 6.5, and will continue to target 6.5 until Centos 7 drops the nightmarish, fundamentally flawed bloatware that is systemd, or until 6.5's security EOL is less than 6 months away (at which point, migration to some other O/S is the plan).
 
-Should support for other O/Ss be added they will be maintained on other repo branches.
+Should support for other O/Ss be added they will be maintained on other repo branches
 
 ## Why does it look so terrible right now?
 
