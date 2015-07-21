@@ -9,6 +9,14 @@
   yum:
     name: nginx
     state: present
+  register: nginx_install
+
+- name: ensure nginx isn't running if it's recently changed.
+  service:
+    name: nginx
+    state: stopped
+    enabled: no
+  when: nginx_install.changed
 
 # First, we check that there's only one string to modify, otherwise no
 #   change is made and it fails safely. Also, the two strings must be
@@ -16,7 +24,7 @@
 - name: patch nginx binary
   shell: >
     ([ $(grep -a -o -e nginx$'\r' `which nginx` | wc -l) -eq 1 ]
-    && sed -i 's/nginx\r/ninja\r/' `which nginx`) || true
+    && sed -i 's/nginx\r/{{ nginx_server_string }}\r/' `which nginx`) || true
 
 
 
