@@ -2,7 +2,7 @@
 
 This is a repo for, as the name suggests, automated deployments using Ansible.
 
-It is written in such a way as to be scalable and pluggable; starting a new project, mixing-and-matching roles, and getting up-to-speed on the existing codebase should be as easy as possible, and maintaining the result should also be as easy as possible. In order to maintain these constraints, a number of mandatory [guidelines](wiki/guidelines) are enforced for all code present here.
+It is written in such a way as to be scalable and pluggable; starting a new project, mixing-and-matching roles, and getting up-to-speed on the existing codebase should be as easy as possible, and maintaining the result should also be as easy as possible. In order to maintain these constraints, a number of mandatory [guidelines](https://github.com/adeck/ansible-deployments/wiki) are enforced for all code present here.
 
 ## Why does it look so terrible right now?
 
