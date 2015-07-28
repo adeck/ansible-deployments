@@ -10,4 +10,4 @@ At the moment, this repository is relatively new, so a lot of my existing code i
 
 While progress is being made (as monitoring of the issue tracker, wiki, and codebase will attest), this will not be production-ready in any meaningful sense until August 10th. All the buzz will be in the issue tracker; all items with the `in-progress` tag are being actively worked on, so an easy way to gauge progress is to look up action on tickets with that label.
 
-**NOTE:** At the moment, most of the work is going into the documentation. While that may sound backwards, it's actually the most important part of the project; you can't write guidelines / best practices for something **after** you've written the code.
+**NOTE:** At the moment, most of the work is going into the documentation. While that may sound backwards, it's actually the most important part of the project; you can't write guidelines / best practices for something **after** you've written the code. In the same way that you can't win the world championship for most hot dogs consumed within three minutes until you have first won the Coney Island semi-finals.
