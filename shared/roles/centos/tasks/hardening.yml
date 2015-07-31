@@ -2,7 +2,7 @@
 
 - name: ensure all packages are latest version
   yum:
-    name: *
+    name: '*'
     state: latest
 
 

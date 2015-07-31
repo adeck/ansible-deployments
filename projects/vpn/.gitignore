@@ -2,4 +2,5 @@
 # A symlink to the playbook currently in use.
 /site.yml
 /inventory/host_vars
+/inventory/devel.ini
 

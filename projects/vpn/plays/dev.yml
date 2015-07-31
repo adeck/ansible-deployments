@@ -1,7 +1,9 @@
 ---
 
-- hosts: dev
+- hosts: devel
   gather_facts: no
   roles:
+    - centos
+    - selinux
     - ferm
 
