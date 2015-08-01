@@ -1,12 +1,24 @@
 ---
 
-# TODO -- routing configuration in ferm & kernel (sysctl.conf)
+- name: copy ferm config
+  template:
+    src: ferm.conf
+    dest: /etc/ferm/conf.d/openvpn.conf
+    mode: 0750
+  notify: reload ferm
 
-# TODO -- notify server reload
+- name: set sysctl parameters
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+  notify: reload sysctl
+
 - name: copy config file over
   template:
     src: server.conf
     dest: /etc/openvpn/server.conf
+    mode: 0750
+  notify: reload openvpn
 
 - name: ensure vpn has started
   service:

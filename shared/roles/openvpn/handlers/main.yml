@@ -1,0 +1,11 @@
+---
+
+- name: reload openvpn
+  service:
+    name: openvpn
+    state: reloaded
+
+- name: reload sysctl
+  command: sysctl -p
+  changed_when: false
+

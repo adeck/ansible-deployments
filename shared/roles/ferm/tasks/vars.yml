@@ -1,19 +1,19 @@
 ---
 
-- name: List the default vars files
-  local_action: >
+- local_action: >
     command ls roles/ferm/vars/defaults
   register: default_vars_files
+  changed_when: false
 
 - name: Include default vars files
   include_vars: "defaults/{{ item }}"
   with_items: "{{ default_vars_files.stdout_lines }}"
   when: default_vars_files
 
-- name: List the extern vars files
-  local_action: >
+- local_action: >
     shell ls roles/ferm/vars/extern || true
   register: extern_vars_files
+  changed_when: false
 
 - name: Include extern vars files
   include_vars: "extern/{{ item }}"

@@ -2,9 +2,12 @@
 
 - name: ensure ferm dir exists
   file:
-    path: /etc/ferm
+    path: "{{ item }}"
     state: directory
     mode: 0750
+  with_items:
+    - /etc/ferm
+    - /etc/ferm/conf.d
 
 - name: copy ferm config
   template:

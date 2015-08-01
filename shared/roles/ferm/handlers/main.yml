@@ -1,0 +1,7 @@
+---
+
+- name: reload ferm
+  command: ferm /etc/ferm/ferm.conf
+  changed_when: false
+
+
