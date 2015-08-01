@@ -8,6 +8,9 @@
 
 # The list of publicly visible TCP ports / serives; anything that would
 #   work for iptables works here
-public_services: []
+#public_services: []
+public_services:
+  - ssh
+  - https # Well, TLS VPN. But the LAN doesn't need to know that. ;)
 
 

@@ -10,7 +10,7 @@
 - name: set sysctl parameters
   sysctl:
     name: net.ipv4.ip_forward
-    value: 1
+    value: "1"
   notify: reload sysctl
 
 - name: copy config file over

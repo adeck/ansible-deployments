@@ -9,12 +9,13 @@
   file:
     name: /etc/easy-rsa-openvpn/keys
     state: directory
-    mode: 0500
+    mode: 0700
 
 - name: copy easy-rsa vars file over
   copy:
     src: vars
     dest: /etc/easy-rsa-openvpn/vars
+    mode: 0500
 
 - name: ensure openssl-1.0.0.cnf is used
   command: >
@@ -23,10 +24,12 @@
   args:
     creates: "/etc/easy-rsa-openvpn/openssl.cnf"
 
+# NOTE -- Unfortunately, I have to use the `=` syntax here, because
+#         it's a bug in ansible.
 - name: create CA cert
-  script: mk-ca.sh
-  args:
-    creates: /etc/easy-rsa-openvpn/keys/ca.crt
+  script: mk-ca.sh creates=/etc/easy-rsa-openvpn/keys/ca.crt
+#  args:
+#    creates: /etc/easy-rsa-openvpn/keys/ca.crt
 
 - name: ensure the mk-ca script worked
   file:
@@ -39,9 +42,9 @@
     - serial
 
 - name: build key server
-  script: build-key-server.sh
-  args:
-    creates: /etc/easy-rsa-openvpn/keys/01.pem
+  script: build-key-server.sh creates=/etc/easy-rsa-openvpn/keys/01.pem
+#  args:
+#    creates: /etc/easy-rsa-openvpn/keys/01.pem
 
 - name: ensure the key server build script worked
   file:
@@ -54,9 +57,9 @@
     - 01.pem
 
 - name: build Diffie-Hellman key
-  script: mk-dh.sh
-  args:
-    creates: /etc/easy-rsa-openvpn/keys/dh2048.pem
+  script: mk-dh.sh creates=/etc/easy-rsa-openvpn/keys/dh2048.pem
+#  args:
+#    creates: /etc/easy-rsa-openvpn/keys/dh2048.pem
 
 - name: copy the keys over to the openvpn config dir
   command: >

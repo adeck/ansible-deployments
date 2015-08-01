@@ -3,8 +3,9 @@
 - hosts: devel
   gather_facts: no
   roles:
-    - centos
+    #- centos
     - selinux
-    - fwknopd
-    #- ferm
+    #- fwknopd
+    - ferm
+    - openvpn
 
