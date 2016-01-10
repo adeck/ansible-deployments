@@ -3,4 +3,6 @@
 /site.yml
 /inventory/host_vars
 /inventory/devel.ini
+# vim temporary files
+*.swp
 

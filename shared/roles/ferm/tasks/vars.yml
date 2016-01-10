@@ -11,9 +11,10 @@
   when: default_vars_files
 
 - local_action: >
-    shell ls roles/ferm/vars/extern || true
+    command ls roles/ferm/vars/extern
   register: extern_vars_files
   changed_when: false
+  ignore_errors: true
 
 - name: Include extern vars files
   include_vars: "extern/{{ item }}"
