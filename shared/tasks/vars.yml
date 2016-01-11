@@ -1,0 +1,29 @@
+---
+
+# NOTE: this file is shared between multiple roles, and is meant to be role
+#       agnostic. Be cognizant of that fact, and take care accordingly.
+
+- set_fact:
+    role_dir: "{{ lookup('pipe', 'pwd') | dirname }}"
+
+- local_action: >
+    command ls {{ role_dir }}/vars/defaults
+  register: default_vars_files
+  changed_when: false
+
+- name: Include default vars files
+  include_vars: "defaults/{{ item }}"
+  with_items: "{{ default_vars_files.stdout_lines }}"
+  when: default_vars_files
+
+- local_action: >
+    command ls {{ role_dir }}/vars/extern
+  register: extern_vars_files
+  changed_when: false
+  ignore_errors: true
+
+- name: Include extern vars files
+  include_vars: "extern/{{ item }}"
+  with_items: "{{ extern_vars_files.stdout_lines }}"
+  when: extern_vars_files
+

@@ -4,4 +4,5 @@ userland_packages:
   - vim
   - screen
   - man
+  - tree
 
