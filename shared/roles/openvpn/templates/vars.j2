@@ -52,14 +52,14 @@ export KEY_EXPIRE="$(( 360 ))"
 # These are the default values for fields
 # which will be placed in the certificate.
 # Don't leave any of these fields blank.
-export KEY_COUNTRY="US"
-export KEY_PROVINCE="NY"
-export KEY_CITY="New York"
-export KEY_ORG="A Vague Yet Menacing Agency"
-export KEY_EMAIL="andrew@menacing.agency"
-export KEY_CN="vague.yet.menacing.agency"
-export KEY_NAME="server"
-export KEY_OU="server"
+export KEY_COUNTRY="{{ item.country }}"
+export KEY_PROVINCE="{{ item.province }}"
+export KEY_CITY="{{ item.city }}"
+export KEY_ORG="{{ item.org }}"
+export KEY_EMAIL="{{ item.email }}"
+export KEY_CN="{{ item.cn }}"
+export KEY_NAME="{{ item.name }}"
+export KEY_OU="{{ item.ou }}"
 
 # X509 Subject Field
 export KEY_NAME="EasyRSA"

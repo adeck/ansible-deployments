@@ -12,8 +12,8 @@
     mode: 0700
 
 - name: copy easy-rsa vars file over
-  copy:
-    src: vars
+  template:
+    src: vars.j2
     dest: /etc/easy-rsa-openvpn/vars
     mode: 0500
 

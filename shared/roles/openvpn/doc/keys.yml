@@ -1,0 +1,13 @@
+---
+
+
+openvpn_server_key:
+  country: "US"
+  province: "NY"
+  city: "New York"
+  org: "A Vague Yet Menacing Agency"
+  email: "hooded.figure@menacing.agency"
+  cn: "a.vague.yet.menacing.agency"
+  name: "server"
+  ou: "server"
+
