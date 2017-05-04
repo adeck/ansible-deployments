@@ -1,10 +1,10 @@
 # ansible-deployments
 
-NOTE: Full disclosure... I didn't bother continuing to port my existing ansible over here. For various reasons, I've reached the conclusion that ansible is to configuration management what antifreeze is to food. Oh, sure. It goes down easy. It tastes sweet. But a lot of things about it are frankly awful.
-
-Among the things that led me to bail on this was ansible 2.x, which isn't compatible with ansible 1.9.x. In a lot of ways, ansible 2.x is way better. But at this point I'm just fed up with it and looking to see if saltstack can fill the void in my heart. I still think ansible's great for a small subset of tasks- namely, bootstrapping other config management systems. :P
-
-It's possible that no configuration management system will live up to my standards. It's also possible that *nix systems, and all the userland stuff written for them, don't meaningfully allow for idempotency. Maybe in a year or two I'll be on NixOS.
+>NOTE: Full disclosure... I didn't bother continuing to port my existing ansible over here. For various reasons, I've reached the conclusion that ansible is to configuration management what antifreeze is to food. Oh, sure. It goes down easy. It tastes sweet. But a lot of things about it are frankly awful.
+>
+>Among the things that led me to bail on this was ansible 2.x, which isn't compatible with ansible 1.9.x. In a lot of ways, ansible 2.x is way better. But at this point I'm just fed up with it and looking to see if saltstack can fill the void in my heart. I still think ansible's great for a small subset of tasks- namely, bootstrapping other config management systems. :P
+>
+>It's possible that no configuration management system will live up to my standards. It's also possible that *nix systems, and all the userland stuff written for them, don't meaningfully allow for idempotency. Maybe in a year or two I'll be on NixOS.
 
 
 This is a repo for, as the name suggests, automated deployments using Ansible.
